@@ -17,4 +17,33 @@ which aztec
 rm -rf <PATH>
 ```
 
-need to set GH auth with ghcr in order to compile
+need to set GH auth with ghcr in order to compile.
+
+then, to start the sandbox,
+
+```
+aztec start --sandbox
+
+```
+
+to generate artifacts:
+
+```
+bun run codegen
+```
+
+to compile:
+
+```
+aztec-nargo compile
+```
+
+then, to run tests:
+
+```
+bun test
+```
+
+### Acknowledgements
+
+A lot of the commands and configs in this repo are from [here](https://github.com/AztecProtocol/aztec-starter/tree/main/src)
