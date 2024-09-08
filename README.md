@@ -14,7 +14,7 @@ you made need to delete your `.aztec` dir
 
 ```bash
 which aztec
-rm -rf path
+rm -rf <PATH>
 ```
 
 need to set GH auth with ghcr in order to compile
