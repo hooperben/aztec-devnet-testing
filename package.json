@@ -2,9 +2,19 @@
   "name": "aztec-sandbox-dev",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "vitest --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@aztec/aztec.js": "0.52.0"
+  },
+  "devDependencies": {
+    "@aztec/accounts": "0.52.0",
+    "@aztec/noir-contracts.js": "0.52.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
   "keywords": [],
   "author": ""
