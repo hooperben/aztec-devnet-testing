@@ -1,4 +1,8 @@
 import {
+  ActualAztecContractContractArtifact,
+  ActualAztecContractContract,
+} from "../src/artifacts/ActualAztecContract.js";
+import {
   AccountWallet,
   CompleteAddress,
   ContractDeployer,
@@ -39,6 +43,44 @@ describe("aztec contract testing", async () => {
 
   test("Deploys the contract", async () => {
     const salt = Fr.random();
-    console.log(salt);
-  });
+
+    const actualContract = ActualAztecContractContractArtifact;
+    const [deployerWallet, adminWallet] = wallets; // using first account as deployer and second as contract admin
+    const adminAddress = adminWallet.getCompleteAddress().address;
+
+    const deploymentData = getContractInstanceFromDeployParams(actualContract, {
+      constructorArgs: [adminAddress],
+      salt,
+      deployer: deployerWallet.getAddress(),
+    });
+
+    const deployer = new ContractDeployer(actualContract, deployerWallet);
+    const tx = deployer
+      .deploy(adminAddress)
+      .send({ contractAddressSalt: salt });
+    const receipt = await tx.getReceipt();
+
+    expect(receipt).toEqual(
+      expect.objectContaining({
+        status: TxStatus.PENDING,
+        error: "",
+      }),
+    );
+
+    const receiptAfterMined = await tx.wait({ wallet: deployerWallet });
+
+    expect(await pxe.getContractInstance(deploymentData.address)).toBeDefined();
+    expect(
+      await pxe.isContractPubliclyDeployed(deploymentData.address),
+    ).toBeTruthy();
+    expect(receiptAfterMined).toEqual(
+      expect.objectContaining({
+        status: TxStatus.SUCCESS,
+      }),
+    );
+
+    expect(receiptAfterMined.contract.instance.address).toEqual(
+      deploymentData.address,
+    );
+  }, 300_000);
 });
